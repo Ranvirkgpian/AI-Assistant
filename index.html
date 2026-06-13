@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Assistant — Prompt Engineering Project</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-name">AI Assistant</div>
+        <div class="brand-sub">Prompt Engineering Project</div>
+      </div>
+      <nav>
+        <div class="nav-label">Functions</div>
+        <div class="nav-item active" onclick="switchPanel('home')" id="nav-home"><i class="ti ti-home"></i> Home</div>
+        <div class="nav-item" onclick="switchPanel('qa')" id="nav-qa"><i class="ti ti-message-circle-question"></i> Answer Questions</div>
+        <div class="nav-item" onclick="switchPanel('summary')" id="nav-summary"><i class="ti ti-file-text"></i> Summarize Text</div>
+        <div class="nav-item" onclick="switchPanel('creative')" id="nav-creative"><i class="ti ti-wand"></i> Creative Content</div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="stat-row"><span>Queries run</span><span class="stat-val" id="stat-queries">0</span></div>
+        <div class="stat-row"><span>Helpful</span><span class="stat-val" id="stat-helpful">—</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="settings-bar" class="settings-bar"></div>
+      <!-- HOME -->
+      <div class="panel active" id="panel-home">
+        <div class="topbar"><span class="topbar-title">Welcome</span><span class="topbar-badge">3 functions available</span></div>
+        <div class="panel-body">
+          <div class="welcome-note">This AI Assistant can answer factual questions, summarize text, and generate creative content. Choose a function from the sidebar to get started.</div>
+          <div class="function-cards">
+            <div class="fn-card" onclick="switchPanel('qa')">
+              <div class="fn-icon purple"><i class="ti ti-message-circle-question"></i></div>
+              <div class="fn-title">Answer Questions</div>
+              <div class="fn-desc">Ask any factual question and get a clear, accurate answer.</div>
+            </div>
+            <div class="fn-card" onclick="switchPanel('summary')">
+              <div class="fn-icon teal"><i class="ti ti-file-text"></i></div>
+              <div class="fn-title">Summarize Text</div>
+              <div class="fn-desc">Paste any article or document and get a structured summary.</div>
+            </div>
+            <div class="fn-card" onclick="switchPanel('creative')">
+              <div class="fn-icon amber"><i class="ti ti-wand"></i></div>
+              <div class="fn-title">Creative Content</div>
+              <div class="fn-desc">Generate stories, poems, essays, and more on any topic.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q&A -->
+      <div class="panel" id="panel-qa">
+        <div class="topbar"><span class="topbar-title">Answer Questions</span><span class="topbar-badge purple-badge">Function 1 of 3</span></div>
+        <div class="panel-body">
+          <div class="ps-label">Quick prompt templates</div>
+          <div class="prompt-chips">
+            <div class="pchip" onclick="fillQA('What is artificial intelligence and how does it work?')">What is AI?</div>
+            <div class="pchip" onclick="fillQA('Explain the water cycle in simple terms.')">Water cycle</div>
+            <div class="pchip" onclick="fillQA('What are 3 tips for studying more effectively?')">Study tips</div>
+            <div class="pchip" onclick="fillQA('What is the difference between RAM and ROM?')">RAM vs ROM</div>
+            <div class="pchip" onclick="fillQA('How does the internet work?')">How internet works</div>
+          </div>
+          <div class="input-row">
+            <textarea id="qa-input" rows="3" placeholder="Type your question here..."></textarea>
+            <button class="send-btn" id="qa-btn" onclick="runQA()">Ask →</button>
+          </div>
+          <div id="qa-result"></div>
+          <div id="qa-history" class="history-log"></div>
+        </div>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="panel" id="panel-summary">
+        <div class="topbar"><span class="topbar-title">Summarize Text</span><span class="topbar-badge teal-badge">Function 2 of 3</span></div>
+        <div class="panel-body">
+          <div class="ps-label">Summary style</div>
+          <div class="opts-row" id="sum-opts">
+            <button class="opt-btn sel" onclick="selOpt(this,'Brief overview')">Brief overview</button>
+            <button class="opt-btn" onclick="selOpt(this,'Key bullet points')">Key bullet points</button>
+            <button class="opt-btn" onclick="selOpt(this,'Main argument & evidence')">Main argument</button>
+          </div>
+          <div class="ps-label">Paste your text</div>
+          <textarea class="text-area-big" id="sum-input" placeholder="Paste any article, essay, or document text here..."></textarea>
+          <button class="wide-btn teal-btn" id="sum-btn" onclick="runSummary()">Summarize →</button>
+          <div id="sum-result"></div>
+          <div id="sum-history" class="history-log"></div>
+        </div>
+      </div>
+
+      <!-- CREATIVE -->
+      <div class="panel" id="panel-creative">
+        <div class="topbar"><span class="topbar-title">Creative Content</span><span class="topbar-badge amber-badge">Function 3 of 3</span></div>
+        <div class="panel-body">
+          <div class="creative-grid">
+            <div class="field-group">
+              <div class="field-label">Content type</div>
+              <select id="cr-type">
+                <option>Short story</option><option>Poem</option><option>Essay</option>
+                <option>Product description</option><option>Speech / Motivational talk</option><option>Sci-fi scenario</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Tone</div>
+              <select id="cr-tone">
+                <option>Engaging and vivid</option><option>Humorous and light</option>
+                <option>Serious and reflective</option><option>Inspirational</option><option>Dark and moody</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Length</div>
+              <select id="cr-length">
+                <option>Short (1-2 paragraphs)</option><option>Medium (3-4 paragraphs)</option><option>Long (5+ paragraphs)</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Topic / Theme</div>
+              <input type="text" id="cr-topic" placeholder="e.g. a robot who learns to dream" />
+            </div>
+          </div>
+          <div class="ps-label">Quick ideas</div>
+          <div class="prompt-chips" style="margin-bottom:14px;">
+            <div class="pchip" onclick="fillCreative('a robot who learns to dream')">Robot & dreams</div>
+            <div class="pchip" onclick="fillCreative('the last library on Earth')">Last library</div>
+            <div class="pchip" onclick="fillCreative('a letter from the future')">Letter from future</div>
+            <div class="pchip" onclick="fillCreative('a city that never sleeps')">Sleepless city</div>
+          </div>
+          <button class="wide-btn amber-btn" id="cr-btn" onclick="runCreative()">Generate content →</button>
+          <div id="cr-result"></div>
+          <div id="cr-history" class="history-log"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
