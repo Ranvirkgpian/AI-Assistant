@@ -7,7 +7,7 @@ A web-based AI Assistant built as part of the **Prompt Engineering Major Project
 ## 🌐 Live Demo
 
 > Deployed via GitHub Pages:  
-> `https://YOUR_USERNAME.github.io/ai-assistant`
+> `https://RanvirKgpian.github.io/AI-Assistant`
 
 ---
 
